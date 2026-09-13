@@ -20,6 +20,12 @@ export default class MatchManager extends LightningElement {
     columns = COLUMNS;
     wiredMatchesResult;
 
+    resultOptions = [
+        { label: 'Win', value: 'Win' },
+        { label: 'Lose', value: 'Lose' },
+        { label: 'Draw', value: 'Draw' }
+    ];
+
     newMatchName = '';
     newTournamentId = '';
     newGameId = '';

@@ -28,5 +28,5 @@
     <template>
         <name>flexipage:defaultAppHomeTemplate</name>
     </template>
-    <type>AppHome</type>
+    <type>AppPage</type>
 </FlexiPage>

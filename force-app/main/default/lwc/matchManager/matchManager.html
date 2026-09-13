@@ -41,11 +41,7 @@
                 </div>
                 <div class="slds-col">
                     <lightning-combobox label="Result" data-field="scoreResult" value={scoreResult}
-                        options={[
-                            { label: 'Win', value: 'Win' },
-                            { label: 'Lose', value: 'Lose' },
-                            { label: 'Draw', value: 'Draw' }
-                        ]}
+                        options={resultOptions}
                         onchange={handleFieldChange}>
                     </lightning-combobox>
                 </div>
