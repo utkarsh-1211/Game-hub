@@ -62,10 +62,6 @@
         <name>PermissionSet</name>
     </types>
     <types>
-        <members>GameHub Console</members>
-        <name>CustomApplication</name>
-    </types>
-    <types>
         <members>*</members>
         <name>CustomTab</name>
     </types>
