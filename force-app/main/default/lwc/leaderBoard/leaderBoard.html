@@ -1,0 +1,36 @@
+<template>
+    <lightning-card title="Leaderboard" icon-name="custom:custom67">
+        <div class="slds-p-horizontal_medium">
+            <h3 class="slds-text-heading_small">Global Ranking - Top Players</h3>
+            <lightning-datatable
+                key-field="Id"
+                data={topPlayers}
+                columns={globalColumns}
+                hide-checkbox-column>
+            </lightning-datatable>
+
+            <div class="slds-m-top_small">
+                <lightning-button label="Recalculate Rankings" onclick={handleRecalculate}></lightning-button>
+            </div>
+
+            <h3 class="slds-text-heading_small slds-m-top_medium">Tournament Ranking</h3>
+            <div class="slds-grid slds-gutters slds-m-bottom_small">
+                <div class="slds-col">
+                    <lightning-input label="Tournament Id" value={tournamentIdFilter} onchange={handleTournamentIdChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-align-bottom">
+                    <lightning-button label="Load Ranking" onclick={handleLoadTournamentRanking}></lightning-button>
+                </div>
+            </div>
+
+            <template if:true={showTournamentRanking}>
+                <lightning-datatable
+                    key-field="Id"
+                    data={tournamentRanking}
+                    columns={tournamentColumns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+            </template>
+        </div>
+    </lightning-card>
+</template>

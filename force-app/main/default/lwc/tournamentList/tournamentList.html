@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title="Tournament Explorer" icon-name="custom:custom25">
+        <div class="slds-p-horizontal_medium">
+            <template if:true={hasTournaments}>
+                <template for:each={tournaments} for:item="t">
+                    <div key={t.Id} class="slds-box slds-m-bottom_x-small slds-grid slds-grid_align-spread">
+                        <div>
+                            <p class="slds-text-heading_small">{t.Name}</p>
+                            <p class="slds-text-body_small">
+                                Game: {t.Game__r.Name} &bull; Status: {t.Tournament_Status__c}
+                            </p>
+                            <p class="slds-text-body_small">
+                                {t.Start_Date__c} - {t.End_Date__c} &bull; Prize Pool: {t.Prize_Pool__c}
+                            </p>
+                        </div>
+                        <lightning-button
+                            label="Join Tournament"
+                            variant="brand"
+                            data-id={t.Id}
+                            onclick={handleJoin}>
+                        </lightning-button>
+                    </div>
+                </template>
+            </template>
+
+            <template if:false={hasTournaments}>
+                <p class="slds-text-body_regular">No active or upcoming tournaments right now.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>

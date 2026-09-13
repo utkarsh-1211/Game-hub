@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <types>
+        <members>Player__c</members>
+        <members>Game__c</members>
+        <members>Tournament__c</members>
+        <members>Tournament_Registration__c</members>
+        <members>Match__c</members>
+        <members>Match_Player__c</members>
+        <members>Reward__c</members>
+        <name>CustomObject</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ApexClass</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>*</members>
+        <name>LightningComponentBundle</name>
+    </types>
+    <types>
+        <members>GameHub_Player</members>
+        <members>GameHub_Admin</members>
+        <name>PermissionSet</name>
+    </types>
+    <types>
+        <members>GameHub Console</members>
+        <name>CustomApplication</name>
+    </types>
+    <types>
+        <members>Player__c</members>
+        <members>Game__c</members>
+        <members>Tournament__c</members>
+        <members>Match__c</members>
+        <members>Reward__c</members>
+        <name>CustomTab</name>
+    </types>
+    <types>
+        <members>GameHub_Console_Home</members>
+        <name>FlexiPage</name>
+    </types>
+    <version>60.0</version>
+</Package>

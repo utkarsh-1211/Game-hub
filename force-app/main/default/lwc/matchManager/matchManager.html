@@ -1,0 +1,79 @@
+<template>
+    <lightning-card title="Match Manager (Admin)" icon-name="custom:custom24">
+        <div class="slds-p-horizontal_medium">
+
+            <h3 class="slds-text-heading_small">Create Match</h3>
+            <div class="slds-grid slds-gutters slds-m-bottom_small">
+                <div class="slds-col">
+                    <lightning-input label="Match Name" data-field="newMatchName" value={newMatchName} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Tournament Id" data-field="newTournamentId" value={newTournamentId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Game Id" data-field="newGameId" value={newGameId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-align-bottom">
+                    <lightning-button label="Create Match" variant="brand" onclick={handleCreateMatch}></lightning-button>
+                </div>
+            </div>
+
+            <h3 class="slds-text-heading_small">Assign Players</h3>
+            <div class="slds-grid slds-gutters slds-m-bottom_small">
+                <div class="slds-col">
+                    <lightning-input label="Match Id" data-field="selectedMatchId" value={selectedMatchId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Player Ids (comma separated)" data-field="playerIdsToAssign" value={playerIdsToAssign} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-align-bottom">
+                    <lightning-button label="Assign Players" onclick={handleAssignPlayers}></lightning-button>
+                </div>
+            </div>
+
+            <h3 class="slds-text-heading_small">Update Score</h3>
+            <div class="slds-grid slds-gutters slds-m-bottom_small">
+                <div class="slds-col">
+                    <lightning-input label="Match Player Id" data-field="scoreMatchPlayerId" value={scoreMatchPlayerId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input type="number" label="Score" data-field="scoreValue" value={scoreValue} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-combobox label="Result" data-field="scoreResult" value={scoreResult}
+                        options={[
+                            { label: 'Win', value: 'Win' },
+                            { label: 'Lose', value: 'Lose' },
+                            { label: 'Draw', value: 'Draw' }
+                        ]}
+                        onchange={handleFieldChange}>
+                    </lightning-combobox>
+                </div>
+                <div class="slds-col slds-align-bottom">
+                    <lightning-button label="Update Score" onclick={handleUpdateScore}></lightning-button>
+                </div>
+            </div>
+
+            <h3 class="slds-text-heading_small">Declare Winner</h3>
+            <div class="slds-grid slds-gutters slds-m-bottom_medium">
+                <div class="slds-col">
+                    <lightning-input label="Match Id" data-field="winnerMatchId" value={winnerMatchId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col">
+                    <lightning-input label="Winner Player Id" data-field="winnerPlayerId" value={winnerPlayerId} onchange={handleFieldChange}></lightning-input>
+                </div>
+                <div class="slds-col slds-align-bottom">
+                    <lightning-button label="Declare Winner" variant="destructive" onclick={handleDeclareWinner}></lightning-button>
+                </div>
+            </div>
+
+            <h3 class="slds-text-heading_small">Matches</h3>
+            <lightning-datatable
+                key-field="Id"
+                data={matches}
+                columns={columns}
+                hide-checkbox-column>
+            </lightning-datatable>
+        </div>
+    </lightning-card>
+</template>

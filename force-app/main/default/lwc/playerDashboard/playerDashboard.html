@@ -1,0 +1,51 @@
+<template>
+    <lightning-card title="Player Dashboard" icon-name="custom:custom63">
+        <div class="slds-p-horizontal_medium">
+            <template if:true={hasError}>
+                <div class="slds-text-color_error">{error}</div>
+            </template>
+
+            <template if:true={isLoaded}>
+                <div class="slds-grid slds-wrap slds-gutters slds-m-bottom_medium">
+                    <div class="slds-col slds-size_1-of-4">
+                        <p class="slds-text-title_caps">Player</p>
+                        <p class="slds-text-heading_small">{player.Name}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <p class="slds-text-title_caps">Total Score</p>
+                        <p class="slds-text-heading_small">{player.Total_Score__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <p class="slds-text-title_caps">Rank</p>
+                        <p class="slds-text-heading_small">{player.Rank__c}</p>
+                    </div>
+                    <div class="slds-col slds-size_1-of-4">
+                        <p class="slds-text-title_caps">Skill Level</p>
+                        <p class="slds-text-heading_small">{player.Skill_Level__c}</p>
+                    </div>
+                </div>
+
+                <h3 class="slds-text-heading_small slds-m-bottom_x-small">Recent Matches</h3>
+                <lightning-datatable
+                    key-field="id"
+                    data={recentMatches}
+                    columns={matchColumns}
+                    hide-checkbox-column
+                    show-row-number-column>
+                </lightning-datatable>
+
+                <h3 class="slds-text-heading_small slds-m-top_medium slds-m-bottom_x-small">Rewards</h3>
+                <lightning-datatable
+                    key-field="Id"
+                    data={rewards}
+                    columns={rewardColumns}
+                    hide-checkbox-column>
+                </lightning-datatable>
+
+                <div class="slds-m-top_medium">
+                    <lightning-button label="Refresh" onclick={handleRefresh}></lightning-button>
+                </div>
+            </template>
+        </div>
+    </lightning-card>
+</template>

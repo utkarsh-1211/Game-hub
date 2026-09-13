@@ -1,0 +1,54 @@
+<template>
+    <lightning-card title="Game Catalog" icon-name="custom:custom18">
+        <div class="slds-p-horizontal_medium">
+            <lightning-combobox
+                label="Filter by category"
+                value={selectedCategory}
+                options={categoryOptions}
+                onchange={handleCategoryChange}>
+            </lightning-combobox>
+
+            <template if:true={error}>
+                <p class="slds-text-color_error slds-m-top_small">{error}</p>
+            </template>
+
+            <template if:true={hasGames}>
+                <ul class="slds-has-dividers_around-space slds-m-top_small">
+                    <template for:each={gameList} for:item="game">
+                        <li key={game.Id} class="slds-item">
+                            <div class="slds-grid slds-grid_align-spread slds-p-around_small">
+                                <div>
+                                    <p class="slds-text-heading_small">{game.Name}</p>
+                                    <p class="slds-text-body_small">
+                                        {game.Game_Category__c} &bull; {game.Game_Mode__c} &bull; Max {game.Max_Players__c} players
+                                    </p>
+                                </div>
+                                <lightning-button
+                                    label="View Tournaments"
+                                    data-id={game.Id}
+                                    onclick={handleViewTournaments}>
+                                </lightning-button>
+                            </div>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+
+            <template if:false={hasGames}>
+                <p class="slds-text-body_regular slds-m-top_small">No games found.</p>
+            </template>
+
+            <template if:true={showTournaments}>
+                <h3 class="slds-text-heading_small slds-m-top_medium">Tournaments</h3>
+                <template for:each={tournaments} for:item="t">
+                    <div key={t.Id} class="slds-box slds-m-top_x-small">
+                        <p class="slds-text-heading_small">{t.Name}</p>
+                        <p class="slds-text-body_small">
+                            {t.Tournament_Status__c} &bull; Starts {t.Start_Date__c} &bull; Prize {t.Prize_Pool__c}
+                        </p>
+                    </div>
+                </template>
+            </template>
+        </div>
+    </lightning-card>
+</template>

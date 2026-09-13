@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <label>Reward</label>
+    <pluralLabel>Rewards</pluralLabel>
+    <nameField>
+        <label>Reward Name</label>
+        <type>Text</type>
+        
+    </nameField>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <sharingModel>Private</sharingModel>
+    <enableActivities>true</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <description>Stores player rewards and achievements.</description>
+</CustomObject>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Reward_Type__c</fullName>
+    <label>Reward Type</label>
+    <type>Picklist</type>
+    <required>false</required>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value><fullName>Badge</fullName><default>false</default><label>Badge</label></value>
+            <value><fullName>Coins</fullName><default>false</default><label>Coins</label></value>
+            <value><fullName>Trophy</fullName><default>false</default><label>Trophy</label></value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

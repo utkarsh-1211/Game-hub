@@ -1,0 +1,22 @@
+<template>
+    <lightning-card title="Rewards & Achievements" icon-name="custom:custom11">
+        <div class="slds-p-horizontal_medium">
+            <template if:true={hasRewards}>
+                <ul class="slds-has-dividers_around-space">
+                    <template for:each={rewardList} for:item="reward">
+                        <li key={reward.Id} class="slds-item slds-p-around_x-small">
+                            <lightning-badge label={reward.Reward_Type__c} class="slds-m-right_x-small"></lightning-badge>
+                            <span>{reward.Name}</span>
+                            <span class="slds-text-body_small slds-m-left_x-small">
+                                +{reward.Points_Awarded__c} pts &bull; {reward.Reward_Date__c}
+                            </span>
+                        </li>
+                    </template>
+                </ul>
+            </template>
+            <template if:false={hasRewards}>
+                <p class="slds-text-body_regular">No rewards earned yet.</p>
+            </template>
+        </div>
+    </lightning-card>
+</template>
