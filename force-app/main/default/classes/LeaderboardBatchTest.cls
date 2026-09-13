@@ -3,10 +3,29 @@ private class LeaderboardBatchTest {
 
     @TestSetup
     static void setup() {
-        List<Player__c> players = new List<Player__c>();
-        players.add(new Player__c(Name = 'Batch High', Email__c = 'bh@example.com', Username__c = 'bh', Total_Score__c = 200));
-        players.add(new Player__c(Name = 'Batch Mid', Email__c = 'bm@example.com', Username__c = 'bm', Total_Score__c = 100));
-        players.add(new Player__c(Name = 'Batch Low', Email__c = 'bl@example.com', Username__c = 'bl', Total_Score__c = 5));
+        List<sObject> players = new List<sObject>();
+
+        sObject p1 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p1.put('Name', 'Batch High');
+        p1.put('Email__c', 'bh@example.com');
+        p1.put('Username__c', 'bh');
+        p1.put('Total_Score__c', 200);
+        players.add(p1);
+
+        sObject p2 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p2.put('Name', 'Batch Mid');
+        p2.put('Email__c', 'bm@example.com');
+        p2.put('Username__c', 'bm');
+        p2.put('Total_Score__c', 100);
+        players.add(p2);
+
+        sObject p3 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p3.put('Name', 'Batch Low');
+        p3.put('Email__c', 'bl@example.com');
+        p3.put('Username__c', 'bl');
+        p3.put('Total_Score__c', 5);
+        players.add(p3);
+
         insert players;
     }
 
@@ -16,9 +35,9 @@ private class LeaderboardBatchTest {
         Database.executeBatch(new LeaderboardBatch(), 200);
         Test.stopTest();
 
-        List<Player__c> ranked = [SELECT Name, Rank__c FROM Player__c ORDER BY Rank__c ASC];
-        System.assertEquals('Batch High', ranked[0].Name);
-        System.assertEquals(1, ranked[0].Rank__c);
-        System.assertEquals(3, ranked[2].Rank__c);
+        List<sObject> ranked = Database.query('SELECT Name, Rank__c FROM Player__c ORDER BY Rank__c ASC');
+        System.assertEquals('Batch High', (String)ranked[0].get('Name'));
+        System.assertEquals(1, (Decimal)ranked[0].get('Rank__c'));
+        System.assertEquals(3, (Decimal)ranked[2].get('Rank__c'));
     }
 }
