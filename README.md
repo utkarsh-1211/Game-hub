@@ -1,5 +1,9 @@
 # GameHub — Salesforce Gaming Management System
 
+## 🚀 Live App & Org Links
+- **Direct App Link**: [Launch GameHub Console Home](https://orgfarm-b6f0401ced-dev-ed.develop.my.salesforce.com/lightning/n/GameHub_Console_Home)
+- **Salesforce Org URL**: [Salesforce Developer Org](https://orgfarm-b6f0401ced-dev-ed.develop.my.salesforce.com)
+
 A Salesforce DX project implementing GameHub's tournament/leaderboard/rewards platform,
 built from the architecture spec (Player registrations, game catalog, tournaments,
 match results, leaderboards, rewards) using custom objects, Apex, triggers, a batch job,
