@@ -1,14 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
-        <members>Player__c</members>
-        <members>Game__c</members>
-        <members>Tournament__c</members>
-        <members>Tournament_Registration__c</members>
-        <members>Match__c</members>
-        <members>Match_Player__c</members>
-        <members>Reward__c</members>
+        <members>*</members>
         <name>CustomObject</name>
+    </types>
+    <types>
+        <members>Game__c.Game_Category__c</members>
+        <members>Game__c.Game_Mode__c</members>
+        <members>Game__c.Max_Players__c</members>
+        <members>Game__c.Release_Date__c</members>
+        <members>Game__c.Status__c</members>
+        <members>Match_Player__c.Match__c</members>
+        <members>Match_Player__c.Player__c</members>
+        <members>Match_Player__c.Result__c</members>
+        <members>Match_Player__c.Score__c</members>
+        <members>Match__c.Game__c</members>
+        <members>Match__c.Match_Date__c</members>
+        <members>Match__c.Status__c</members>
+        <members>Match__c.Tournament__c</members>
+        <members>Match__c.Winner__c</members>
+        <members>Player__c.Country__c</members>
+        <members>Player__c.Email__c</members>
+        <members>Player__c.Join_Date__c</members>
+        <members>Player__c.Rank__c</members>
+        <members>Player__c.Skill_Level__c</members>
+        <members>Player__c.Total_Score__c</members>
+        <members>Player__c.Username__c</members>
+        <members>Reward__c.Player__c</members>
+        <members>Reward__c.Points_Awarded__c</members>
+        <members>Reward__c.Reward_Date__c</members>
+        <members>Reward__c.Reward_Type__c</members>
+        <members>Reward__c.Tournament__c</members>
+        <members>Tournament_Registration__c.Player__c</members>
+        <members>Tournament_Registration__c.Registration_Date__c</members>
+        <members>Tournament_Registration__c.Score__c</members>
+        <members>Tournament_Registration__c.Status__c</members>
+        <members>Tournament_Registration__c.Tournament__c</members>
+        <members>Tournament__c.End_Date__c</members>
+        <members>Tournament__c.Game__c</members>
+        <members>Tournament__c.Max_Players__c</members>
+        <members>Tournament__c.Prize_Pool__c</members>
+        <members>Tournament__c.Start_Date__c</members>
+        <members>Tournament__c.Tournament_Status__c</members>
+        <name>CustomField</name>
     </types>
     <types>
         <members>*</members>
@@ -32,11 +66,7 @@
         <name>CustomApplication</name>
     </types>
     <types>
-        <members>Player__c</members>
-        <members>Game__c</members>
-        <members>Tournament__c</members>
-        <members>Match__c</members>
-        <members>Reward__c</members>
+        <members>*</members>
         <name>CustomTab</name>
     </types>
     <types>
