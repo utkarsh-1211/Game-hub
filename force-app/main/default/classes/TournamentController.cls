@@ -6,7 +6,7 @@
 public with sharing class TournamentController {
 
     @AuraEnabled(cacheable=true)
-    public static List<Tournament__c> getTournaments(Id gameId) {
+    public static List<sObject> getTournaments(Id gameId) {
         String query =
             'SELECT Id, Name, Game__c, Game__r.Name, Start_Date__c, End_Date__c, ' +
             'Max_Players__c, Tournament_Status__c, Prize_Pool__c ' +
@@ -19,30 +19,26 @@ public with sharing class TournamentController {
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Tournament__c> getActiveTournaments() {
-        return [
-            SELECT Id, Name, Game__c, Game__r.Name, Start_Date__c, End_Date__c,
-                   Max_Players__c, Tournament_Status__c, Prize_Pool__c
-            FROM Tournament__c
-            WHERE Tournament_Status__c IN ('Upcoming', 'Active')
-            WITH SECURITY_ENFORCED
-            ORDER BY Start_Date__c ASC
-        ];
+    public static List<sObject> getActiveTournaments() {
+        return Database.query(
+            'SELECT Id, Name, Game__c, Game__r.Name, Start_Date__c, End_Date__c, ' +
+            'Max_Players__c, Tournament_Status__c, Prize_Pool__c ' +
+            'FROM Tournament__c WHERE Tournament_Status__c IN (\'Upcoming\', \'Active\') ' +
+            'WITH SECURITY_ENFORCED ORDER BY Start_Date__c ASC'
+        );
     }
 
     @AuraEnabled(cacheable=true)
-    public static List<Tournament_Registration__c> getPlayerTournaments(Id playerId) {
+    public static List<sObject> getPlayerTournaments(Id playerId) {
         if (playerId == null) {
             throw new AuraHandledException('A player Id is required.');
         }
-        return [
-            SELECT Id, Tournament__c, Tournament__r.Name, Tournament__r.Tournament_Status__c,
-                   Tournament__r.Start_Date__c, Registration_Date__c, Status__c, Score__c
-            FROM Tournament_Registration__c
-            WHERE Player__c = :playerId
-            WITH SECURITY_ENFORCED
-            ORDER BY Registration_Date__c DESC
-        ];
+        return Database.query(
+            'SELECT Id, Tournament__c, Tournament__r.Name, Tournament__r.Tournament_Status__c, ' +
+            'Tournament__r.Start_Date__c, Registration_Date__c, Status__c, Score__c ' +
+            'FROM Tournament_Registration__c WHERE Player__c = :playerId ' +
+            'WITH SECURITY_ENFORCED ORDER BY Registration_Date__c DESC'
+        );
     }
 
     /**
@@ -55,41 +51,38 @@ public with sharing class TournamentController {
             throw new AuraHandledException('Both playerId and tournamentId are required.');
         }
 
-        Tournament__c tournament = [
-            SELECT Id, Max_Players__c, Tournament_Status__c
-            FROM Tournament__c
-            WHERE Id = :tournamentId
-            LIMIT 1
-        ];
+        List<sObject> tournaments = Database.query(
+            'SELECT Id, Max_Players__c, Tournament_Status__c FROM Tournament__c WHERE Id = :tournamentId LIMIT 1'
+        );
+        if (tournaments.isEmpty()) {
+            throw new AuraHandledException('Tournament not found.');
+        }
+        sObject tournament = tournaments[0];
 
-        if (tournament.Tournament_Status__c == 'Completed') {
+        if ((String)tournament.get('Tournament_Status__c') == 'Completed') {
             throw new AuraHandledException('This tournament has already completed.');
         }
 
-        Integer existingCount = [
-            SELECT COUNT()
-            FROM Tournament_Registration__c
-            WHERE Tournament__c = :tournamentId
-        ];
-        if (tournament.Max_Players__c != null && existingCount >= tournament.Max_Players__c) {
+        List<sObject> existingRegs = Database.query(
+            'SELECT Id FROM Tournament_Registration__c WHERE Tournament__c = :tournamentId'
+        );
+        Decimal maxPlayers = (Decimal)tournament.get('Max_Players__c');
+        if (maxPlayers != null && existingRegs.size() >= maxPlayers) {
             throw new AuraHandledException('This tournament is full.');
         }
 
-        Integer duplicate = [
-            SELECT COUNT()
-            FROM Tournament_Registration__c
-            WHERE Tournament__c = :tournamentId AND Player__c = :playerId
-        ];
-        if (duplicate > 0) {
+        List<sObject> duplicates = Database.query(
+            'SELECT Id FROM Tournament_Registration__c WHERE Tournament__c = :tournamentId AND Player__c = :playerId'
+        );
+        if (!duplicates.isEmpty()) {
             throw new AuraHandledException('You are already registered for this tournament.');
         }
 
-        Tournament_Registration__c registration = new Tournament_Registration__c(
-            Player__c = playerId,
-            Tournament__c = tournamentId,
-            Registration_Date__c = Date.today(),
-            Status__c = 'Registered'
-        );
+        sObject registration = Schema.getGlobalDescribe().get('Tournament_Registration__c').newSObject();
+        registration.put('Player__c', playerId);
+        registration.put('Tournament__c', tournamentId);
+        registration.put('Registration_Date__c', Date.today());
+        registration.put('Status__c', 'Registered');
 
         try {
             insert registration;

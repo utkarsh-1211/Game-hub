@@ -3,39 +3,73 @@ private class LeaderboardControllerTest {
 
     @TestSetup
     static void setup() {
-        List<Player__c> players = new List<Player__c>();
-        players.add(new Player__c(Name = 'High Scorer', Email__c = 'high@example.com', Username__c = 'high', Total_Score__c = 100));
-        players.add(new Player__c(Name = 'Mid Scorer', Email__c = 'mid@example.com', Username__c = 'mid', Total_Score__c = 50));
-        players.add(new Player__c(Name = 'Low Scorer', Email__c = 'low@example.com', Username__c = 'low', Total_Score__c = 10));
+        List<sObject> players = new List<sObject>();
+
+        sObject p1 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p1.put('Name', 'High Scorer');
+        p1.put('Email__c', 'high@example.com');
+        p1.put('Username__c', 'high');
+        p1.put('Total_Score__c', 100);
+        players.add(p1);
+
+        sObject p2 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p2.put('Name', 'Mid Scorer');
+        p2.put('Email__c', 'mid@example.com');
+        p2.put('Username__c', 'mid');
+        p2.put('Total_Score__c', 50);
+        players.add(p2);
+
+        sObject p3 = Schema.getGlobalDescribe().get('Player__c').newSObject();
+        p3.put('Name', 'Low Scorer');
+        p3.put('Email__c', 'low@example.com');
+        p3.put('Username__c', 'low');
+        p3.put('Total_Score__c', 10);
+        players.add(p3);
+
         insert players;
 
-        Game__c game = new Game__c(Name = 'Chess Masters', Game_Category__c = 'Strategy', Status__c = 'Active');
+        sObject game = Schema.getGlobalDescribe().get('Game__c').newSObject();
+        game.put('Name', 'Chess Masters');
+        game.put('Game_Category__c', 'Strategy');
+        game.put('Status__c', 'Active');
         insert game;
 
-        Tournament__c tournament = new Tournament__c(Name = 'Grand Prix', Game__c = game.Id, Start_Date__c = Date.today());
+        sObject tournament = Schema.getGlobalDescribe().get('Tournament__c').newSObject();
+        tournament.put('Name', 'Grand Prix');
+        tournament.put('Game__c', game.Id);
+        tournament.put('Start_Date__c', Date.today());
         insert tournament;
 
-        insert new Tournament_Registration__c(Player__c = players[0].Id, Tournament__c = tournament.Id, Score__c = 30);
-        insert new Tournament_Registration__c(Player__c = players[1].Id, Tournament__c = tournament.Id, Score__c = 20);
+        sObject tr1 = Schema.getGlobalDescribe().get('Tournament_Registration__c').newSObject();
+        tr1.put('Player__c', players[0].Id);
+        tr1.put('Tournament__c', tournament.Id);
+        tr1.put('Score__c', 30);
+        insert tr1;
+
+        sObject tr2 = Schema.getGlobalDescribe().get('Tournament_Registration__c').newSObject();
+        tr2.put('Player__c', players[1].Id);
+        tr2.put('Tournament__c', tournament.Id);
+        tr2.put('Score__c', 20);
+        insert tr2;
     }
 
     @isTest
     static void testGetTopPlayers() {
         Test.startTest();
-        List<Player__c> top = LeaderboardController.getTopPlayers(2);
+        List<sObject> top = LeaderboardController.getTopPlayers(2);
         Test.stopTest();
         System.assertEquals(2, top.size());
-        System.assertEquals('High Scorer', top[0].Name);
+        System.assertEquals('High Scorer', (String)top[0].get('Name'));
     }
 
     @isTest
     static void testGetTournamentRanking() {
-        Tournament__c tournament = [SELECT Id FROM Tournament__c LIMIT 1];
+        sObject tournament = Database.query('SELECT Id FROM Tournament__c LIMIT 1');
         Test.startTest();
-        List<Tournament_Registration__c> ranking = LeaderboardController.getTournamentRanking(tournament.Id);
+        List<sObject> ranking = LeaderboardController.getTournamentRanking(tournament.Id);
         Test.stopTest();
         System.assertEquals(2, ranking.size());
-        System.assertEquals(30, ranking[0].Score__c);
+        System.assertEquals(30, (Decimal)ranking[0].get('Score__c'));
     }
 
     @isTest
@@ -44,9 +78,9 @@ private class LeaderboardControllerTest {
         LeaderboardController.calculateRankings();
         Test.stopTest();
 
-        List<Player__c> ranked = [SELECT Name, Rank__c FROM Player__c ORDER BY Rank__c ASC];
-        System.assertEquals('High Scorer', ranked[0].Name);
-        System.assertEquals(1, ranked[0].Rank__c);
-        System.assertEquals(3, ranked[2].Rank__c);
+        List<sObject> ranked = Database.query('SELECT Name, Rank__c FROM Player__c ORDER BY Rank__c ASC');
+        System.assertEquals('High Scorer', (String)ranked[0].get('Name'));
+        System.assertEquals(1, (Decimal)ranked[0].get('Rank__c'));
+        System.assertEquals(3, (Decimal)ranked[2].get('Rank__c'));
     }
 }
