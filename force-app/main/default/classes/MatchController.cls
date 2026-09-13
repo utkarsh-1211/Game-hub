@@ -6,7 +6,7 @@
 public with sharing class MatchController {
 
     @AuraEnabled(cacheable=true)
-    public static List<Match__c> getMatches(Id tournamentId) {
+    public static List<sObject> getMatches(Id tournamentId) {
         String query =
             'SELECT Id, Name, Tournament__c, Tournament__r.Name, Game__c, Game__r.Name, ' +
             'Match_Date__c, Winner__c, Winner__r.Name, Status__c ' +
@@ -23,13 +23,13 @@ public with sharing class MatchController {
         if (String.isBlank(matchName) || tournamentId == null || gameId == null) {
             throw new AuraHandledException('Match name, tournament and game are required.');
         }
-        Match__c match = new Match__c(
-            Name = matchName,
-            Tournament__c = tournamentId,
-            Game__c = gameId,
-            Match_Date__c = (matchDate != null ? matchDate : Datetime.now()),
-            Status__c = 'Scheduled'
-        );
+        sObject match = Schema.getGlobalDescribe().get('Match__c').newSObject();
+        match.put('Name', matchName);
+        match.put('Tournament__c', tournamentId);
+        match.put('Game__c', gameId);
+        match.put('Match_Date__c', (matchDate != null ? matchDate : Datetime.now()));
+        match.put('Status__c', 'Scheduled');
+
         try {
             insert match;
         } catch (DmlException e) {
@@ -48,20 +48,21 @@ public with sharing class MatchController {
         }
 
         Set<Id> existingPlayerIds = new Set<Id>();
-        for (Match_Player__c mp : [
-            SELECT Player__c FROM Match_Player__c WHERE Match__c = :matchId
-        ]) {
-            existingPlayerIds.add(mp.Player__c);
+        List<sObject> existingMps = Database.query(
+            'SELECT Player__c FROM Match_Player__c WHERE Match__c = :matchId'
+        );
+        for (sObject mp : existingMps) {
+            existingPlayerIds.add((Id)mp.get('Player__c'));
         }
 
-        List<Match_Player__c> toInsert = new List<Match_Player__c>();
+        List<sObject> toInsert = new List<sObject>();
         for (Id playerId : playerIds) {
             if (!existingPlayerIds.contains(playerId)) {
-                toInsert.add(new Match_Player__c(
-                    Match__c = matchId,
-                    Player__c = playerId,
-                    Score__c = 0
-                ));
+                sObject mp = Schema.getGlobalDescribe().get('Match_Player__c').newSObject();
+                mp.put('Match__c', matchId);
+                mp.put('Player__c', playerId);
+                mp.put('Score__c', 0);
+                toInsert.add(mp);
             }
         }
 
@@ -83,7 +84,11 @@ public with sharing class MatchController {
         if (matchPlayerId == null) {
             throw new AuraHandledException('A match player record Id is required.');
         }
-        Match_Player__c mp = new Match_Player__c(Id = matchPlayerId, Score__c = score, Result__c = result);
+        sObject mp = Schema.getGlobalDescribe().get('Match_Player__c').newSObject(matchPlayerId);
+        mp.put('Score__c', score);
+        if (String.isNotBlank(result)) {
+            mp.put('Result__c', result);
+        }
         try {
             update mp;
         } catch (DmlException e) {
@@ -100,11 +105,9 @@ public with sharing class MatchController {
         if (matchId == null || winnerId == null) {
             throw new AuraHandledException('A match and winner are required.');
         }
-        Match__c match = new Match__c(
-            Id = matchId,
-            Winner__c = winnerId,
-            Status__c = 'Completed'
-        );
+        sObject match = Schema.getGlobalDescribe().get('Match__c').newSObject(matchId);
+        match.put('Winner__c', winnerId);
+        match.put('Status__c', 'Completed');
         try {
             update match;
         } catch (DmlException e) {
