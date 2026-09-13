@@ -4,21 +4,25 @@
         <itemInstances>
             <componentInstance>
                 <componentName>c:gameCatalog</componentName>
+                <identifier>c_gameCatalog</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentName>c:tournamentList</componentName>
+                <identifier>c_tournamentList</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentName>c:matchManager</componentName>
+                <identifier>c_matchManager</identifier>
             </componentInstance>
         </itemInstances>
         <itemInstances>
             <componentInstance>
                 <componentName>c:leaderBoard</componentName>
+                <identifier>c_leaderBoard</identifier>
             </componentInstance>
         </itemInstances>
         <name>main</name>

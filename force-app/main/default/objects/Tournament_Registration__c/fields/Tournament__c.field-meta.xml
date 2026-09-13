@@ -7,5 +7,5 @@
     <relationshipLabel>Registrations</relationshipLabel>
     <relationshipName>Registrations</relationshipName>
     <required>true</required>
-    <deleteConstraint>SetNull</deleteConstraint>
+    <deleteConstraint>Restrict</deleteConstraint>
 </CustomField>
